@@ -37,14 +37,33 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          livenessProbe:
+          startupProbe:
+            # must initialize within 3*100=300 seconds
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.podHealthCheck.path }}
+              port: {{ .Values.podHealthCheck.port }}
+            periodSeconds: 3
+            failureThreshold: 100
           readinessProbe:
+            # not ready after 10*6=60 seconds without success
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.podHealthCheck.path }}
+              port: {{ .Values.podHealthCheck.port }}
+              scheme: HTTP
+            periodSeconds: 10
+            failureThreshold: 6
+            successThreshold: 1
+            timeoutSeconds: 5
+          livenessProbe:
+            # kill after 20*6=120 seconds without success
+            httpGet:
+              path: {{ .Values.podHealthCheck.path }}
+              port: {{ .Values.podHealthCheck.port }}
+              scheme: HTTP
+            periodSeconds: 20
+            failureThreshold: 6
+            successThreshold: 1
+            timeoutSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

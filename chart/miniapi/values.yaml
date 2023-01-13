@@ -40,6 +40,10 @@ service:
   type: ClusterIP
   port: 8080
 
+podHealthCheck:
+  port: 8080
+  path: /health
+
 ingress:
   enabled: true
   className: ""

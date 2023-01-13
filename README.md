@@ -44,3 +44,9 @@ helm create miniapi
 ```
 helm install miniapi chart/miniapi/ --values chart/miniapi/values.yaml
 ```
+
+### Upgrade
+
+```
+helm upgrade miniapi chart/miniapi/ --values chart/miniapi/values.yaml
+```
