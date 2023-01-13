@@ -42,6 +42,7 @@ func main() {
 
 	addr := env.String("ADDR", ":8080")
 	path := env.String("ROUTE", "/v1/world")
+	health := env.String("HEALTH", "/health")
 
 	mux := http.NewServeMux()
 	server := &http.Server{
@@ -51,15 +52,18 @@ func main() {
 
 	const root = "/"
 
-	mux.HandleFunc(root, handlerRoot)
-	log.Printf("registered on port %s path %s", addr, root)
-
-	mux.HandleFunc(path, handlerPath)
-	log.Printf("registered on port %s path %s", addr, path)
+	register(mux, addr, root, handlerRoot)
+	register(mux, addr, path, handlerPath)
+	register(mux, addr, health, handlerHealth)
 
 	go listenAndServe(server, addr)
 
 	<-chan struct{}(nil)
+}
+
+func register(mux *http.ServeMux, addr, path string, handler http.HandlerFunc) {
+	mux.HandleFunc(path, handler)
+	log.Printf("registered on port %s path %s", addr, path)
 }
 
 func listenAndServe(s *http.Server, addr string) {
@@ -93,4 +97,9 @@ func handlerRoot(w http.ResponseWriter, r *http.Request) {
 func handlerPath(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s %s - 200 ok", r.RemoteAddr, r.Method, r.RequestURI)
 	response(w, r, http.StatusOK, "ok")
+}
+
+func handlerHealth(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s %s - 200 health ok", r.RemoteAddr, r.Method, r.RequestURI)
+	response(w, r, http.StatusOK, "health ok")
 }
