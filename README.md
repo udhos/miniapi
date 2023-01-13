@@ -50,3 +50,9 @@ helm install miniapi chart/miniapi/ --values chart/miniapi/values.yaml
 ```
 helm upgrade miniapi chart/miniapi/ --values chart/miniapi/values.yaml
 ```
+
+### Uninstall
+
+```
+helm uninstall miniapi
+```
