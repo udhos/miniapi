@@ -1,3 +1,6 @@
+/*
+This is the main package for the miniapi service.
+*/
 package main
 
 import (
@@ -12,7 +15,7 @@ import (
 	"github.com/udhos/miniapi/env"
 )
 
-const version = "0.0.0"
+const version = "0.0.1"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
