@@ -25,4 +25,4 @@ To uninstall the chart:
 
 ### Source
 
-https://github.com/udhos/miniapi/tree/main/docs
+<https://github.com/udhos/miniapi/tree/main/docs>
