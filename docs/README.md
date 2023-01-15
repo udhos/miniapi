@@ -22,3 +22,7 @@ To install the miniapi chart:
 To uninstall the chart:
 
     helm delete my-miniapi
+
+### Source
+
+https://github.com/udhos/miniapi/tree/main/docs
