@@ -31,6 +31,10 @@ docker push -a udhos/miniapi
 
 ## Helm chart
 
+### Using the repository
+
+See <https://udhos.github.io/miniapi/>.
+
 ### Create
 
 ```
