@@ -68,15 +68,24 @@ helm template miniapi ./charts/miniapi --values charts/miniapi/values.yaml
 helm install miniapi ./charts/miniapi --values charts/miniapi/values.yaml --dry-run
 ```
 
-### Package chart into file
-
-```
-helm package ./charts/miniapi
-Successfully packaged chart and saved it to: miniapi-0.1.3.tgz
-```
+### Generate files for a chart repository
 
 A chart repository is an HTTP server that houses one or more packaged charts.
-A chart repository is an HTTP server that houses an index.yaml file and optionally some packaged charts.
+A chart repository is an HTTP server that houses an index.yaml file and optionally (*) some packaged charts.
+
+(*) Optionally since the package charts could be hosted elsewhere and referenced by the index.yaml file.
+
+    docs
+    ├── index.yaml
+    └── miniapi-0.1.3.tgz
+
+See script <update-charts.sh>:
+
+    # generate chart package from source
+    helm package ./charts/miniapi -d ./docs
+
+    # regenerate the index from existing chart packages
+    helm repo index ./docs --url https://udhos.github.io/miniapi/
 
 ### Install
 
