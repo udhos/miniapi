@@ -80,7 +80,7 @@ A chart repository is an HTTP server that houses an index.yaml file and optional
     ├── index.yaml
     └── miniapi-0.1.3.tgz
 
-See script <update-charts.sh>:
+See script [update-charts.sh](update-charts.sh):
 
     # generate chart package from source
     helm package ./charts/miniapi -d ./docs
