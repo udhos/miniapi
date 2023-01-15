@@ -27,7 +27,7 @@ To install the miniapi chart:
 
 To uninstall the chart:
 
-    helm delete my-miniapi
+    helm uninstall my-miniapi
 
 # Source
 
