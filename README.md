@@ -57,7 +57,7 @@ Then edit files.
 helm lint ./charts/miniapi --values charts/miniapi/values.yaml
 ```
 
-### Test redering chart templates locally
+### Test rendering chart templates locally
 
 ```
 helm template miniapi ./charts/miniapi --values charts/miniapi/values.yaml
