@@ -7,9 +7,9 @@ on:
 
 jobs:
   release:
-  #permissions: read-all|write-all
-  permissions:
-    repository-projects: write
+    #permissions: read-all|write-all
+    permissions:
+      repository-projects: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
