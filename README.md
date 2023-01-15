@@ -39,16 +39,36 @@ cd chart
 helm create miniapi
 ```
 
+Then edit files.
+
+### Lint
+
+```
+helm lint ./chart/miniapi --values chart/miniapi/values.yaml
+```
+
+### Test redering chart templates locally
+
+```
+helm template miniapi ./chart/miniapi --values chart/miniapi/values.yaml
+```
+
+### Render templates at server
+
+```
+helm install miniapi ./chart/miniapi --values chart/miniapi/values.yaml --dry-run
+```
+
 ### Install
 
 ```
-helm install miniapi chart/miniapi/ --values chart/miniapi/values.yaml
+helm install miniapi ./chart/miniapi --values chart/miniapi/values.yaml
 ```
 
 ### Upgrade
 
 ```
-helm upgrade miniapi chart/miniapi/ --values chart/miniapi/values.yaml
+helm upgrade miniapi ./chart/miniapi --values chart/miniapi/values.yaml
 ```
 
 ### Uninstall
