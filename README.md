@@ -2,6 +2,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/udhos/miniapi)](https://goreportcard.com/report/github.com/udhos/miniapi)
 [![Go Reference](https://pkg.go.dev/badge/github.com/udhos/miniapi.svg)](https://pkg.go.dev/github.com/udhos/miniapi)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/miniapi)](https://artifacthub.io/packages/search?repo=miniapi)
+[![Docker Pulls](https://img.shields.io/docker/pulls/udhos/miniapi)](https://hub.docker.com/r/udhos/miniapi)
 
 # miniapi
 miniapi
