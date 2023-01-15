@@ -21,10 +21,10 @@ Docker hub:
 
 https://hub.docker.com/r/udhos/miniapi
 
-Pull from docker hub:
+Run from docker hub:
 
 ```
-docker pull udhos/miniapi:0.0.0
+docker run -p 8080:8080 --rm udhos/miniapi:0.0.1
 ```
 
 Build recipe:
