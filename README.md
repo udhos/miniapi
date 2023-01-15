@@ -34,8 +34,8 @@ docker push -a udhos/miniapi
 ### Create
 
 ```
-mkdir chart
-cd chart
+mkdir charts
+cd charts
 helm create miniapi
 ```
 
@@ -44,26 +44,26 @@ Then edit files.
 ### Lint
 
 ```
-helm lint ./chart/miniapi --values chart/miniapi/values.yaml
+helm lint ./charts/miniapi --values charts/miniapi/values.yaml
 ```
 
 ### Test redering chart templates locally
 
 ```
-helm template miniapi ./chart/miniapi --values chart/miniapi/values.yaml
+helm template miniapi ./charts/miniapi --values charts/miniapi/values.yaml
 ```
 
 ### Render templates at server
 
 ```
-helm install miniapi ./chart/miniapi --values chart/miniapi/values.yaml --dry-run
+helm install miniapi ./charts/miniapi --values charts/miniapi/values.yaml --dry-run
 ```
 
 ### Package chart into file
 
 ```
-helm package ./chart/miniapi
-Successfully packaged chart and saved it to: /home/everton/dev/miniapi/miniapi-0.1.3.tgz
+helm package ./charts/miniapi
+Successfully packaged chart and saved it to: miniapi-0.1.3.tgz
 ```
 
 A chart repository is an HTTP server that houses one or more packaged charts.
@@ -72,13 +72,13 @@ A chart repository is an HTTP server that houses an index.yaml file and optional
 ### Install
 
 ```
-helm install miniapi ./chart/miniapi --values chart/miniapi/values.yaml
+helm install miniapi ./charts/miniapi --values charts/miniapi/values.yaml
 ```
 
 ### Upgrade
 
 ```
-helm upgrade miniapi ./chart/miniapi --values chart/miniapi/values.yaml
+helm upgrade miniapi ./charts/miniapi --values charts/miniapi/values.yaml
 ```
 
 ### Uninstall
