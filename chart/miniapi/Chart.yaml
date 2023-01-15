@@ -23,4 +23,9 @@ version: 0.1.3
 # It is recommended to use it with quotes.
 appVersion: "0.0.1"
 
+# Optional fields
+
 icon: https://raw.githubusercontent.com/udhos/miniapi/master/image/miniapi.svg
+
+sources:
+  - https://github.com/udhos/miniapi

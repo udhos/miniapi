@@ -59,6 +59,16 @@ helm template miniapi ./chart/miniapi --values chart/miniapi/values.yaml
 helm install miniapi ./chart/miniapi --values chart/miniapi/values.yaml --dry-run
 ```
 
+### Package chart into file
+
+```
+helm package ./chart/miniapi
+Successfully packaged chart and saved it to: /home/everton/dev/miniapi/miniapi-0.1.3.tgz
+```
+
+A chart repository is an HTTP server that houses one or more packaged charts.
+A chart repository is an HTTP server that houses an index.yaml file and optionally some packaged charts.
+
 ### Install
 
 ```
