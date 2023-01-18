@@ -7,14 +7,15 @@ Once Helm has been set up correctly, add the repo as follows:
 
     helm repo add miniapi https://udhos.github.io/miniapi
 
-If you had already added this repo earlier, run `helm repo update` to retrieve
-the latest versions of the packages.  You can then run `helm search repo miniapi`
-to see the charts.
+Update files from repo:
 
-Example:
+    helm repo update
 
-    $ helm search repo miniapi
+Search miniapi:
+
+    helm search repo miniapi -l
     NAME           	CHART VERSION	APP VERSION	DESCRIPTION
+    miniapi/miniapi	0.1.4        	0.0.1      	A Helm chart for miniapi
     miniapi/miniapi	0.1.3        	0.0.1      	A Helm chart for miniapi
 
 To install the miniapi chart:
