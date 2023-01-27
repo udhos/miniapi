@@ -15,7 +15,7 @@ import (
 	"github.com/udhos/miniapi/env"
 )
 
-const version = "0.0.2"
+const version = "0.0.3"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
