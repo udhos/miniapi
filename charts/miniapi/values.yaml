@@ -82,3 +82,11 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+#
+# See: https://stackoverflow.com/questions/72816925/helm-templating-in-configmap-for-values-yaml
+#
+configMapProperties:
+  ADDR: :8080
+  ROUTE: /v1/world
+  HEALTH: /health
