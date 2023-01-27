@@ -23,7 +23,9 @@ To install the miniapi chart:
     helm install my-miniapi miniapi/miniapi
     #            ^          ^       ^
     #            |          |        \__ chart
+    #            |          |
     #            |           \__________ repo
+    #            |
     #             \_____________________ release (chart instance installed in cluster)
 
 To uninstall the chart:
