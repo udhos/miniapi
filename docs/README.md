@@ -15,6 +15,9 @@ Search miniapi:
 
     helm search repo miniapi -l
     NAME           	CHART VERSION	APP VERSION	DESCRIPTION
+    miniapi/miniapi	0.1.7        	0.0.2      	A Helm chart for miniapi
+    miniapi/miniapi	0.1.6        	0.0.2      	A Helm chart for miniapi
+    miniapi/miniapi	0.1.5        	0.0.1      	A Helm chart for miniapi
     miniapi/miniapi	0.1.4        	0.0.1      	A Helm chart for miniapi
     miniapi/miniapi	0.1.3        	0.0.1      	A Helm chart for miniapi
 
