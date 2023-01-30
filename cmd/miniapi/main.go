@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/udhos/miniapi/env"
 )
@@ -41,8 +42,10 @@ func main() {
 	}
 
 	addr := env.String("ADDR", ":8080")
-	path := env.String("ROUTE", "/v1/world")
+	path := env.String("ROUTE", "/v1/hello;/v1/world;;")
 	health := env.String("HEALTH", "/health")
+
+	pathList := strings.FieldsFunc(path, func(r rune) bool { return r == ';' })
 
 	mux := http.NewServeMux()
 	server := &http.Server{
@@ -53,8 +56,11 @@ func main() {
 	const root = "/"
 
 	register(mux, addr, root, handlerRoot)
-	register(mux, addr, path, handlerPath)
 	register(mux, addr, health, handlerHealth)
+
+	for _, p := range pathList {
+		register(mux, addr, p, handlerPath)
+	}
 
 	go listenAndServe(server, addr)
 
