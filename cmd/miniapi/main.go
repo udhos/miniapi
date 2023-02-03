@@ -94,8 +94,8 @@ func response(w http.ResponseWriter, r *http.Request, status int, message string
 	if errHost != nil {
 		log.Printf("hostname error: %v", errHost)
 	}
-	reply := fmt.Sprintf(`{"message":"%s","status":"%d","path":"%s","method":"%s","host":"%s","serverHostname":"%s"}`,
-		message, status, r.RequestURI, r.Method, r.Host, hostname)
+	reply := fmt.Sprintf(`{"message":"%s","status":"%d","path":"%s","method":"%s","host":"%s","serverHostname":"%s","serverVersion":"%s"}`,
+		message, status, r.RequestURI, r.Method, r.Host, hostname, version)
 	httpJSON(w, reply, status)
 }
 
