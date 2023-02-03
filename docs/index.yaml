@@ -3,9 +3,9 @@ entries:
   miniapi:
   - apiVersion: v2
     appVersion: 0.0.4
-    created: "2023-02-03T16:59:37.753138046-03:00"
+    created: "2023-02-03T17:08:19.638972454-03:00"
     description: A Helm chart for miniapi
-    digest: 2d3e4568e91be08365c2e2dfe2a5f6de753bd7a4cea8a740cc625ab23995caaa
+    digest: d45971399c11f1bf5d98cd16b677a804a7173b52a8a43cf3fb2e4c2bdc59f1a6
     icon: https://raw.githubusercontent.com/udhos/miniapi/master/image/miniapi.svg
     name: miniapi
     sources:
@@ -13,6 +13,7 @@ entries:
     type: application
     urls:
     - https://udhos.github.io/miniapi/miniapi-0.1.9.tgz
+    version: 0.1.9
   - apiVersion: v2
     appVersion: 0.0.3
     created: "2023-01-30T18:43:42.663759347-03:00"
@@ -91,4 +92,4 @@ entries:
     urls:
     - https://udhos.github.io/miniapi/miniapi-0.1.3.tgz
     version: 0.1.3
-generated: "2023-02-03T16:59:37.750470263-03:00"
+generated: "2023-02-03T17:08:19.636410486-03:00"
