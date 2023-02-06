@@ -11,8 +11,21 @@ miniapi
 ./build.sh
 
 miniapi
+```
 
+# test
+
+```
 curl localhost:8080/v1/world
+
+# JSON
+curl -d '{"hello":"world"}' -H 'account: 4321'  'localhost:8080/v1/hello?a=b' | jq
+
+# multipart/form-data
+curl -F param1=value1 -F param2=value2 'localhost:8080/v1/world?a=b' | jq
+
+# application/x-www-form-urlencoded
+curl -H "Content-Type: application/x-www-form-urlencoded" -d "param1=value1&param2=value2" 'localhost:8080/v1/world?a=b' | jq
 ```
 
 ## Docker

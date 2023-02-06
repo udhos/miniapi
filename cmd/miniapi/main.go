@@ -4,10 +4,14 @@ This is the main package for the miniapi service.
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -16,14 +20,20 @@ import (
 	"github.com/udhos/miniapi/env"
 )
 
-const version = "0.0.4"
+const version = "1.0.0"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
 		me, version, runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.GOMAXPROCS(0))
 }
 
+type config struct {
+	paramList []string
+}
+
 func main() {
+
+	app := config{}
 
 	var showVersion bool
 	flag.BoolVar(&showVersion, "version", showVersion, "show version")
@@ -44,8 +54,10 @@ func main() {
 	addr := env.String("ADDR", ":8080")
 	path := env.String("ROUTE", "/v1/hello;/v1/world;;")
 	health := env.String("HEALTH", "/health")
+	params := env.String("PARAMS", "param1;param2")
 
 	pathList := strings.FieldsFunc(path, func(r rune) bool { return r == ';' })
+	app.paramList = strings.FieldsFunc(params, func(r rune) bool { return r == ';' })
 
 	mux := http.NewServeMux()
 	server := &http.Server{
@@ -55,11 +67,11 @@ func main() {
 
 	const root = "/"
 
-	register(mux, addr, root, handlerRoot)
-	register(mux, addr, health, handlerHealth)
+	register(mux, addr, root, func(w http.ResponseWriter, r *http.Request) { handlerRoot(&app, w, r) })
+	register(mux, addr, health, func(w http.ResponseWriter, r *http.Request) { handlerHealth(&app, w, r) })
 
 	for _, p := range pathList {
-		register(mux, addr, p, handlerPath)
+		register(mux, addr, p, func(w http.ResponseWriter, r *http.Request) { handlerPath(&app, w, r) })
 	}
 
 	go listenAndServe(server, addr)
@@ -89,27 +101,97 @@ func httpJSON(w http.ResponseWriter, error string, code int) {
 	fmt.Fprintln(w, error)
 }
 
-func response(w http.ResponseWriter, r *http.Request, status int, message string) {
+func toJSON(v interface{}) string {
+	b, err := json.Marshal(v)
+	if err != nil {
+		log.Printf("toJSON: %v", err)
+	}
+	return string(b)
+}
+
+type responseBody struct {
+	Request        responseRequest `json:"request"`
+	Message        string          `json:"message"`
+	Status         int             `json:"status"`
+	ServerHostname string          `json:"server_hostname"`
+	ServerVersion  string          `json:"server_version"`
+}
+
+type responseRequest struct {
+	Headers   http.Header       `json:"headers"`
+	Method    string            `json:"method"`
+	URI       string            `json:"uri"`
+	Host      string            `json:"host"`
+	Body      string            `json:"body"`
+	FormQuery url.Values        `json:"form_query"`
+	FormPost  url.Values        `json:"form_post"`
+	Params    map[string]string `json:"parameters"`
+}
+
+func response(app *config, w http.ResponseWriter, r *http.Request, status int, message string) {
+	const me = "response"
+
 	hostname, errHost := os.Hostname()
 	if errHost != nil {
-		log.Printf("hostname error: %v", errHost)
+		log.Printf("%s hostname error: %v", me, errHost)
 	}
-	reply := fmt.Sprintf(`{"message":"%s","status":"%d","path":"%s","method":"%s","host":"%s","serverHostname":"%s","serverVersion":"%s"}`,
-		message, status, r.RequestURI, r.Method, r.Host, hostname, version)
-	httpJSON(w, reply, status)
+
+	// take a copy of the body
+	reqBody, errRead := io.ReadAll(r.Body)
+	if errRead != nil {
+		log.Printf("%s: body read error: %v", me, errRead)
+	}
+	r.Body = io.NopCloser(bytes.NewBuffer(reqBody)) // restore it
+
+	errForm := r.ParseForm()
+	if errForm != nil {
+		log.Printf("%s: form error: %v", me, errForm)
+	}
+
+	errMultipart := r.ParseMultipartForm(32 << 20)
+	if errMultipart != nil {
+		log.Printf("%s: form multipart error: %v", me, errMultipart)
+	}
+
+	params := map[string]string{}
+
+	for _, p := range app.paramList {
+		params[p] = r.FormValue(p)
+	}
+
+	reply := responseBody{
+		Request: responseRequest{
+			Headers:   r.Header,
+			Method:    r.Method,
+			URI:       r.RequestURI,
+			Host:      r.Host,
+			Body:      string(reqBody),
+			FormQuery: r.Form,
+			FormPost:  r.PostForm,
+			Params:    params,
+		},
+		Message:        message,
+		Status:         status,
+		ServerHostname: hostname,
+		ServerVersion:  version,
+	}
+
+	body := toJSON(reply)
+
+	httpJSON(w, body, status)
 }
 
-func handlerRoot(w http.ResponseWriter, r *http.Request) {
+func handlerRoot(app *config, w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s %s - 404 not found", r.RemoteAddr, r.Method, r.RequestURI)
-	response(w, r, http.StatusNotFound, "not found")
+	response(app, w, r, http.StatusNotFound, "not found")
 }
 
-func handlerPath(w http.ResponseWriter, r *http.Request) {
+func handlerPath(app *config, w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s %s - 200 ok", r.RemoteAddr, r.Method, r.RequestURI)
-	response(w, r, http.StatusOK, "ok")
+	response(app, w, r, http.StatusOK, "ok")
 }
 
-func handlerHealth(w http.ResponseWriter, r *http.Request) {
+func handlerHealth(app *config, w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s %s - 200 health ok", r.RemoteAddr, r.Method, r.RequestURI)
-	response(w, r, http.StatusOK, "health ok")
+	response(app, w, r, http.StatusOK, "health ok")
 }
