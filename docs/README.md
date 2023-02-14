@@ -13,8 +13,12 @@ Update files from repo:
 
 Search miniapi:
 
-    helm search repo miniapi -l
+    helm search repo miniapi -l --version ">=0.0.0"
     NAME           	CHART VERSION	APP VERSION	DESCRIPTION
+    miniapi/miniapi	1.0.1        	1.0.1      	A Helm chart for miniapi
+    miniapi/miniapi	1.0.0        	1.0.0      	A Helm chart for miniapi
+    miniapi/miniapi	0.1.9        	0.0.4      	A Helm chart for miniapi
+    miniapi/miniapi	0.1.8        	0.0.3      	A Helm chart for miniapi
     miniapi/miniapi	0.1.7        	0.0.2      	A Helm chart for miniapi
     miniapi/miniapi	0.1.6        	0.0.2      	A Helm chart for miniapi
     miniapi/miniapi	0.1.5        	0.0.1      	A Helm chart for miniapi
