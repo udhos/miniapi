@@ -4,7 +4,7 @@ version=$(go run ./cmd/miniapi -version | awk '{ print $2 }' | awk -F= '{ print 
 
 echo version=$version
 
-docker build \
+docker build --no-cache \
     -t udhos/miniapi:latest \
     -t udhos/miniapi:$version \
     -f docker/Dockerfile .
