@@ -1,3 +1,4 @@
+// Package env reads environment variables.
 package env
 
 import (
