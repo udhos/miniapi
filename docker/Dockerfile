@@ -1,6 +1,6 @@
 # STEP 1 build executable binary
 
-FROM golang:1.20.2-alpine3.17 as builder
+FROM golang:1.20.3-alpine3.17 as builder
 
 RUN apk update
 RUN apk add git
@@ -18,9 +18,11 @@ RUN CGO_ENABLED=0 go build -o /tmp/miniapi github.com/udhos/miniapi/cmd/miniapi
 #
 # STEP 2 build a small image from alpine
 #
-FROM alpine:3.17.2
+# curl: https://security.alpinelinux.org/srcpkg/curl
+#
+FROM alpine:3.17.3
 COPY --from=builder /tmp/miniapi /bin/miniapi
-RUN apk add curl=7.88.1-r1
+RUN apk add curl=8.0.1-r0
 RUN adduser -D -g '' user
 USER user
 ENTRYPOINT ["/bin/miniapi"]
