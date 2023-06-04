@@ -22,7 +22,7 @@ RUN CGO_ENABLED=0 go build -o /tmp/miniapi github.com/udhos/miniapi/cmd/miniapi
 #
 FROM alpine:3.17.3
 COPY --from=builder /tmp/miniapi /bin/miniapi
-RUN apk add curl=8.0.1-r0 libcrypto3=3.0.8-r4 libssl3=3.0.8-r4
+RUN apk add curl=8.1.2-r0 libcrypto3=3.0.8-r3 libssl3=3.0.8-r3
 RUN adduser -D -g '' user
 USER user
 ENTRYPOINT ["/bin/miniapi"]
