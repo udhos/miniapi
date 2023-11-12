@@ -18,9 +18,11 @@ import (
 	"strings"
 
 	"github.com/udhos/miniapi/env"
+
+	_ "go.uber.org/automaxprocs"
 )
 
-const version = "1.0.8"
+const version = "1.1.0"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
