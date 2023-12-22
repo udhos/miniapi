@@ -19,10 +19,11 @@ import (
 
 	"github.com/udhos/miniapi/env"
 
+	"github.com/go-chi/chi/v5"
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "1.1.1"
+const version = "1.2.0"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
@@ -31,6 +32,7 @@ func getVersion(me string) string {
 
 type config struct {
 	paramList []string
+	debugForm bool
 }
 
 func main() {
@@ -54,14 +56,17 @@ func main() {
 	}
 
 	addr := env.String("ADDR", ":8080")
-	path := env.String("ROUTE", "/v1/hello;/v1/world;;")
+	path := env.String("ROUTE", "/v1/hello;/v1/world;/card/{cardId}")
 	health := env.String("HEALTH", "/health")
 	params := env.String("PARAMS", "param1;param2")
+	app.debugForm = env.Bool("DEBUG_FORM", false)
 
 	pathList := strings.FieldsFunc(path, func(r rune) bool { return r == ';' })
 	app.paramList = strings.FieldsFunc(params, func(r rune) bool { return r == ';' })
 
-	mux := http.NewServeMux()
+	//mux := http.NewServeMux()
+	mux := chi.NewRouter()
+
 	server := &http.Server{
 		Addr:    addr,
 		Handler: mux,
@@ -81,7 +86,16 @@ func main() {
 	<-chan struct{}(nil)
 }
 
-func register(mux *http.ServeMux, addr, path string, handler http.HandlerFunc) {
+func register(mux *chi.Mux, addr, path string, handler http.HandlerFunc) {
+
+	mux.Post(path, handler)
+	mux.Get(path, handler)
+	mux.Put(path, handler)
+	mux.Delete(path, handler)
+	mux.Patch(path, handler)
+	mux.Head(path, handler)
+	mux.Options(path, handler)
+
 	mux.HandleFunc(path, handler)
 	log.Printf("registered on port %s path %s", addr, path)
 }
@@ -146,12 +160,12 @@ func response(app *config, w http.ResponseWriter, r *http.Request, status int, m
 	r.Body = io.NopCloser(bytes.NewBuffer(reqBody)) // restore it
 
 	errForm := r.ParseForm()
-	if errForm != nil {
+	if app.debugForm && errForm != nil {
 		log.Printf("%s: form error: %v", me, errForm)
 	}
 
 	errMultipart := r.ParseMultipartForm(32 << 20)
-	if errMultipart != nil {
+	if app.debugForm && errMultipart != nil {
 		log.Printf("%s: form multipart error: %v", me, errMultipart)
 	}
 

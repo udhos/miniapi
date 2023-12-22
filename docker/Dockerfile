@@ -23,9 +23,10 @@ RUN CGO_ENABLED=0 go build -o /tmp/miniapi github.com/udhos/miniapi/cmd/miniapi
 FROM alpine:3.18.4
 COPY --from=builder /tmp/miniapi /bin/miniapi
 #RUN apk add curl=8.1.2-r0 libcrypto3=3.1.0-r4 libssl3=3.1.0-r4
-RUN apk update
-RUN apk add curl
-RUN apk upgrade libssl3 libcrypto3 busybox busybox-binsh ssl_client libcurl nghttp2-libs
-RUN adduser -D -g '' user
+RUN apk update && \
+    apk add curl && \
+    apk upgrade libssl3 libcrypto3 busybox busybox-binsh ssl_client libcurl nghttp2-libs && \
+    adduser -D -g '' user && \
+    rm -rf rm /var/cache/apk/*
 USER user
 ENTRYPOINT ["/bin/miniapi"]
