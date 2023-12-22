@@ -104,5 +104,5 @@ affinity: {}
 #
 configMapProperties:
   ADDR: :8080
-  ROUTE: /v1/hello;/v1/world
+  ROUTE: /v1/hello;/v1/world;/card/{cardId}
   HEALTH: /health
