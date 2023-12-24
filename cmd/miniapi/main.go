@@ -23,7 +23,7 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "1.2.1"
+const version = "1.2.2"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
@@ -88,15 +88,18 @@ func main() {
 
 func register(mux *chi.Mux, addr, path string, handler http.HandlerFunc) {
 
-	mux.Post(path, handler)
-	mux.Get(path, handler)
-	mux.Put(path, handler)
-	mux.Delete(path, handler)
-	mux.Patch(path, handler)
-	mux.Head(path, handler)
-	mux.Options(path, handler)
+	/*
+		mux.Post(path, handler)
+		mux.Get(path, handler)
+		mux.Put(path, handler)
+		mux.Delete(path, handler)
+		mux.Patch(path, handler)
+		mux.Head(path, handler)
+		mux.Options(path, handler)
+	*/
 
 	mux.HandleFunc(path, handler)
+
 	log.Printf("registered on port %s path %s", addr, path)
 }
 
