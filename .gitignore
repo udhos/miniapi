@@ -15,3 +15,4 @@
 # vendor/
 
 charts-tmp
+docker-push.sh

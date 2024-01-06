@@ -27,6 +27,6 @@ RUN apk update && \
     apk add curl && \
     apk upgrade libssl3 libcrypto3 busybox busybox-binsh ssl_client libcurl nghttp2-libs && \
     adduser -D -g '' user && \
-    rm -rf rm /var/cache/apk/*
+    rm -rf /var/cache/apk/*
 USER user
 ENTRYPOINT ["/bin/miniapi"]
