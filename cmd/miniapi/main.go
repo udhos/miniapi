@@ -23,7 +23,7 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "1.2.3"
+const version = "1.3.0"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
@@ -60,12 +60,18 @@ func main() {
 	health := env.String("HEALTH", "/health")
 	params := env.String("PARAMS", "param1;param2")
 	app.debugForm = env.Bool("DEBUG_FORM", false)
+	useChi := env.Bool("CHI", false)
 
 	pathList := strings.FieldsFunc(path, func(r rune) bool { return r == ';' })
 	app.paramList = strings.FieldsFunc(params, func(r rune) bool { return r == ';' })
 
-	//mux := http.NewServeMux()
-	mux := chi.NewRouter()
+	var mux http.Handler
+
+	if useChi {
+		mux = chi.NewRouter()
+	} else {
+		mux = http.NewServeMux()
+	}
 
 	server := &http.Server{
 		Addr:    addr,
@@ -74,11 +80,18 @@ func main() {
 
 	const root = "/"
 
-	register(mux, addr, root, func(w http.ResponseWriter, r *http.Request) { handlerRoot(&app, w, r) })
-	register(mux, addr, health, func(w http.ResponseWriter, r *http.Request) { handlerHealth(&app, w, r) })
-
-	for _, p := range pathList {
-		register(mux, addr, p, func(w http.ResponseWriter, r *http.Request) { handlerPath(&app, w, r) })
+	if useChi {
+		registerChi(mux.(*chi.Mux), addr, root, func(w http.ResponseWriter, r *http.Request) { handlerRoot(&app, w, r) })
+		registerChi(mux.(*chi.Mux), addr, health, func(w http.ResponseWriter, r *http.Request) { handlerHealth(&app, w, r) })
+		for _, p := range pathList {
+			registerChi(mux.(*chi.Mux), addr, p, func(w http.ResponseWriter, r *http.Request) { handlerPath(&app, w, r) })
+		}
+	} else {
+		register(mux.(*http.ServeMux), addr, root, func(w http.ResponseWriter, r *http.Request) { handlerRoot(&app, w, r) })
+		register(mux.(*http.ServeMux), addr, health, func(w http.ResponseWriter, r *http.Request) { handlerHealth(&app, w, r) })
+		for _, p := range pathList {
+			register(mux.(*http.ServeMux), addr, p, func(w http.ResponseWriter, r *http.Request) { handlerPath(&app, w, r) })
+		}
 	}
 
 	go listenAndServe(server, addr)
@@ -86,7 +99,7 @@ func main() {
 	<-chan struct{}(nil)
 }
 
-func register(mux *chi.Mux, addr, path string, handler http.HandlerFunc) {
+func registerChi(mux *chi.Mux, addr, path string, handler http.HandlerFunc) {
 
 	/*
 		mux.Post(path, handler)
@@ -97,6 +110,13 @@ func register(mux *chi.Mux, addr, path string, handler http.HandlerFunc) {
 		mux.Head(path, handler)
 		mux.Options(path, handler)
 	*/
+
+	mux.HandleFunc(path, handler)
+
+	log.Printf("registered on port %s path %s", addr, path)
+}
+
+func register(mux *http.ServeMux, addr, path string, handler http.HandlerFunc) {
 
 	mux.HandleFunc(path, handler)
 
