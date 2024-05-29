@@ -2,6 +2,19 @@ apiVersion: v1
 entries:
   miniapi:
   - apiVersion: v2
+    appVersion: 1.3.1
+    created: "2024-05-29T00:00:12.375115296-03:00"
+    description: A Helm chart for installing miniapi into Kubernetes
+    digest: eff2b4d19ad8fcb06b2aed2787db7a2cb8ba2ed2352161cb52287a450d5a953a
+    icon: https://raw.githubusercontent.com/udhos/miniapi/master/image/miniapi.svg
+    name: miniapi
+    sources:
+    - https://github.com/udhos/miniapi
+    type: application
+    urls:
+    - https://udhos.github.io/miniapi/miniapi-1.3.1.tgz
+    version: 1.3.1
+  - apiVersion: v2
     appVersion: 1.3.0
     created: "2024-02-12T18:58:27.247247504-03:00"
     description: A Helm chart for installing miniapi into Kubernetes
@@ -313,4 +326,4 @@ entries:
     urls:
     - https://udhos.github.io/miniapi/miniapi-0.1.3.tgz
     version: 0.1.3
-generated: "2024-02-12T18:58:27.245474618-03:00"
+generated: "2024-05-29T00:00:12.374566802-03:00"
