@@ -23,7 +23,7 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-const version = "1.3.1"
+const version = "1.3.2"
 
 func getVersion(me string) string {
 	return fmt.Sprintf("%s version=%s runtime=%s GOOS=%s GOARCH=%s GOMAXPROCS=%d",
@@ -133,11 +133,11 @@ func listenAndServe(s *http.Server, addr string) {
 // It does not otherwise end the request; the caller should ensure no further
 // writes are done to w.
 // The error message should be JSON.
-func httpJSON(w http.ResponseWriter, error string, code int) {
+func httpJSON(w http.ResponseWriter, message string, code int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(code)
-	fmt.Fprintln(w, error)
+	fmt.Fprintln(w, message)
 }
 
 func toJSON(v interface{}) string {
